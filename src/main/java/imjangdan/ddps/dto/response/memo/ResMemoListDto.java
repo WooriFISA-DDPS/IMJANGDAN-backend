@@ -1,10 +1,14 @@
 package imjangdan.ddps.dto.response.memo;
 
+import imjangdan.ddps.dto.response.comment.ResCommentDto;
+import imjangdan.ddps.dto.response.file.ResMemoDetailsFileDto;
 import imjangdan.ddps.entity.Memo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * -Response-
@@ -20,20 +24,26 @@ public class ResMemoListDto {
     private Long memoId;
     private String title;
     private String content;
+    private String latitude;
+    private String longitude;
+    private int score;
     private int viewCount;
     private String createdDate;
     private String modifiedDate;
     private String writerName;
 
     @Builder
-    public ResMemoListDto(Long memoId, String title, String content, int viewCount, String createdDate, String modifiedDate, String writerName) {
+    public ResMemoListDto(Long memoId, String title, String latitude, String longitude, int score, String content, int viewCount, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResMemoDetailsFileDto> files) {
         this.memoId = memoId;
         this.title = title;
         this.content = content;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.score = score;
         this.viewCount = viewCount;
+        this.writerName = writerName;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
-        this.writerName = writerName;
     }
 
     // Entity -> DTO
@@ -42,6 +52,9 @@ public class ResMemoListDto {
                 .memoId(memo.getId())
                 .title(memo.getTitle())
                 .content(memo.getContent())
+                .latitude(memo.getLatitude())
+                .longitude(memo.getLongitude())
+                .score(memo.getScore())
                 .viewCount(memo.getViewCount())
                 .createdDate(memo.getCreatedDate())
                 .modifiedDate(memo.getModifiedDate())
