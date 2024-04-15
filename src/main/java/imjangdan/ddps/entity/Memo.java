@@ -28,13 +28,9 @@ public class Memo extends BaseTimeEntity {
     @Column(nullable = false)
     private String longitude; // 경도
 
-    @Column
-    private int score; // 평점
+    private String category; // 인상. 이모지
 
     private String content;
-
-    @Column(name = "VIEW_COUNT")
-    private int viewCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
@@ -51,29 +47,24 @@ public class Memo extends BaseTimeEntity {
     public List<MemoFile> files = new ArrayList<>();
 
     @Builder
-    public Memo(Long id, String title, String latitude, String longitude, String content, int viewCount, int score, Member member) {
+    public Memo(Long id, String title, String latitude, String longitude, String content, String category, Member member) {
         this.id = id;
         this.title = title;
         this.latitude = latitude;
         this.longitude = longitude;
         this.content = content;
-        this.viewCount = viewCount;
-        this.score = score;
+        this.category = category;
         this.member = member;
     }
 
-    //== 조회수 증가 ==//
-    public void upViewCount() {
-        this.viewCount++;
-    }
 
     //== 수정 Dirty Checking ==//
-    public void update(String title, String content, String latitude, String longitude, int score) {
+    public void update(String title, String content, String latitude, String longitude, String category) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.score = score;
+        this.category = category;
     }
 
     //== Member & Board 연관관계 편의 메소드 ==//

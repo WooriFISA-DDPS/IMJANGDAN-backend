@@ -19,14 +19,14 @@ public class MemoUpdateDto {
     private String content;
     private String latitude;
     private String longitude;
-    private int score;
+    private String category;
 
     @Builder
-    public MemoUpdateDto(String title, String content, String latitude, String longitude, int score) {
+    public MemoUpdateDto(String title, String content, String latitude, String longitude, String category) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.score = score;
+        this.category = category;
     }
 }

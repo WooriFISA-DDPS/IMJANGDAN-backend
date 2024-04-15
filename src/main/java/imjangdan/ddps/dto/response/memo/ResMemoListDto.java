@@ -26,20 +26,20 @@ public class ResMemoListDto {
     private String content;
     private String latitude;
     private String longitude;
-    private int score;
+    private String category;
     private int viewCount;
     private String createdDate;
     private String modifiedDate;
     private String writerName;
 
     @Builder
-    public ResMemoListDto(Long memoId, String title, String latitude, String longitude, int score, String content, int viewCount, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResMemoDetailsFileDto> files) {
+    public ResMemoListDto(Long memoId, String title, String latitude, String longitude, String category, String content, int viewCount, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResMemoDetailsFileDto> files) {
         this.memoId = memoId;
         this.title = title;
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.score = score;
+        this.category = category;
         this.viewCount = viewCount;
         this.writerName = writerName;
         this.createdDate = createdDate;
@@ -54,8 +54,7 @@ public class ResMemoListDto {
                 .content(memo.getContent())
                 .latitude(memo.getLatitude())
                 .longitude(memo.getLongitude())
-                .score(memo.getScore())
-                .viewCount(memo.getViewCount())
+                .category(memo.getCategory())
                 .createdDate(memo.getCreatedDate())
                 .modifiedDate(memo.getModifiedDate())
                 .writerName(memo.getMember().getUsername())

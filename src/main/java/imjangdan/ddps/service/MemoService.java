@@ -71,8 +71,6 @@ public class MemoService {
        Memo findMemo = memoRepository.findByIdWithMemberAndCommentsAndFiles(memoId).orElseThrow(
                () -> new ResourceNotFoundException("Memo", "Memo Id", String.valueOf(memoId))
        );
-       // 조회수 증가
-       findMemo.upViewCount();
        return ResMemoDetailsDto.fromEntity(findMemo);
     }
 
@@ -81,7 +79,7 @@ public class MemoService {
         Memo updateMemo = memoRepository.findByIdWithMemberAndCommentsAndFiles(memoId).orElseThrow(
                 () -> new ResourceNotFoundException("Memo", "Memo Id", String.valueOf(memoId))
         );
-        updateMemo.update(memoDTO.getTitle(), memoDTO.getContent(), memoDTO.getLatitude(), memoDTO.getLongitude(), memoDTO.getScore());
+        updateMemo.update(memoDTO.getTitle(), memoDTO.getContent(), memoDTO.getLatitude(), memoDTO.getLongitude(), memoDTO.getCategory());
         return ResMemoDetailsDto.fromEntity(updateMemo);
     }
 

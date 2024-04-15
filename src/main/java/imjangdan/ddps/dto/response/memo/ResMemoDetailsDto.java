@@ -27,8 +27,7 @@ public class ResMemoDetailsDto {
     private String content;
     private String latitude;
     private String longitude;
-    private int score;
-    private int viewCount;
+    private String category;
     private String writerName;
     private String createdDate;
     private String modifiedDate;
@@ -38,14 +37,13 @@ public class ResMemoDetailsDto {
     private List<ResMemoDetailsFileDto> files;
 
     @Builder
-    public ResMemoDetailsDto(Long memoId, String title, String latitude, String longitude, int score, String content, int viewCount, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResMemoDetailsFileDto> files) {
+    public ResMemoDetailsDto(Long memoId, String title, String latitude, String longitude, String category, String content, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResMemoDetailsFileDto> files) {
         this.memoId = memoId;
         this.title = title;
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.score = score;
-        this.viewCount = viewCount;
+        this.category = category;
         this.writerName = writerName;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
@@ -57,13 +55,12 @@ public class ResMemoDetailsDto {
                 .memoId(memo.getId())
                 .title(memo.getTitle())
                 .content(memo.getContent())
-                .viewCount(memo.getViewCount())
                 .writerName(memo.getMember().getUsername())
                 .createdDate(memo.getCreatedDate())
                 .modifiedDate(memo.getModifiedDate())
                 .latitude(memo.getLatitude())
                 .longitude(memo.getLongitude())
-                .score(memo.getScore())
+                .category(memo.getCategory())
                 .files(memo.getFiles().stream()
                         .map(ResMemoDetailsFileDto::fromEntity)
                         .collect(Collectors.toList()))

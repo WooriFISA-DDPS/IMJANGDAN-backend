@@ -20,6 +20,7 @@ public class MemoWriteDto {
     private String content;
     private String latitude;
     private String longitude;
+    private String category;
     private int score;
 
     public MemoWriteDto(String title, String content, String latitude, String longitude) {
@@ -27,7 +28,7 @@ public class MemoWriteDto {
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.score = score;
+        this.category = category;
     }
 
     @Builder
@@ -37,7 +38,7 @@ public class MemoWriteDto {
                 .content(dto.content)
                 .latitude(dto.latitude)
                 .longitude(dto.longitude)
-                .score(dto.score)
+                .category(dto.category)
                 .build();
     }
 }
