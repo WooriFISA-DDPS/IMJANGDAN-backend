@@ -1,12 +1,12 @@
-package jhcode.ddps.board;
+package imjangdan.ddps.board;
 
-import jhcode.ddps.dto.request.board.BoardWriteDto;
-import jhcode.ddps.dto.response.board.ResBoardWriteDto;
-import jhcode.ddps.controller.BoardController;
-import jhcode.ddps.controller.MemberController;
-import jhcode.ddps.repository.MemberRepository;
-import jhcode.ddps.dto.request.member.MemberRegisterDto;
-import jhcode.ddps.dto.response.member.MemberResponseDto;
+import imjangdan.ddps.dto.request.board.BoardWriteDto;
+import imjangdan.ddps.dto.response.board.ResBoardWriteDto;
+import imjangdan.ddps.controller.BoardController;
+import imjangdan.ddps.controller.MemberController;
+import imjangdan.ddps.repository.MemberRepository;
+import imjangdan.ddps.dto.request.member.MemberRegisterDto;
+import imjangdan.ddps.dto.response.member.MemberResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +43,7 @@ public class BoardServiceTest {
     @Autowired
     private BoardController boardController;
 
-    String path = "C:\\Users\\jhcode33\\workspace\\python_proj\\webcrawling\\file";
+    String path = "C:\\Users\\imjangdan33\\workspace\\python_proj\\webcrawling\\file";
 
     List<MemberRegisterDto> memberList = new ArrayList<>();
 
