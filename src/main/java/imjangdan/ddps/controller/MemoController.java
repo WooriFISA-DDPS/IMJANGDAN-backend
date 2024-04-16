@@ -36,23 +36,21 @@ public class MemoController {
     }
 
     // 페이징 검색 , Get 요청 @RequestBody 사용할 수 없음
-    // 메모 검색 기능 x
-//    @GetMapping("/search")
-//    public ResponseEntity<Page<ResMemoListDto>> search(
-//            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-//            @RequestParam String title,
-//            @RequestParam String content,
-//            @RequestParam String writerName) {
-//        MemoSearchData memoSearchData = MemoSearchData.createdSearchData(title, content, writerName);
-//        Page<ResMemoListDto> searchMemo = memoService.search(memoSearchData, pageable);
-//        return  ResponseEntity.status(HttpStatus.OK).body(searchMemo);
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<Page<ResMemoListDto>> search(
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam String title,
+            @RequestParam String content,
+            @RequestParam String writerName) {
+        MemoSearchData memoSearchData = MemoSearchData.createdSearchData(title, content, writerName);
+        Page<ResMemoListDto> searchMemo = memoService.search(memoSearchData, pageable);
+        return  ResponseEntity.status(HttpStatus.OK).body(searchMemo);
+    }
 
     @PostMapping("/write")
     public ResponseEntity<ResMemoWriteDto> write(
             @RequestBody MemoWriteDto memoDTO,
             @AuthenticationPrincipal Member member) {
-        log.info("memowritememowritememowritememowrite");
         Thread currentThread = Thread.currentThread();
         log.info("현재 실행 중인 스레드: " + currentThread.getName());
         ResMemoWriteDto saveMemoDTO = memoService.write(memoDTO, member);

@@ -67,7 +67,7 @@ public class Memo extends BaseTimeEntity {
         this.category = category;
     }
 
-    //== Member & Memo 연관관계 편의 메소드 ==//
+    //== Member & Board 연관관계 편의 메소드 ==//
     public void setMappingMember(Member member) {
         this.member = member;
         member.getMemos().add(this);

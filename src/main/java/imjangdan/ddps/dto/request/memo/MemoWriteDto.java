@@ -21,8 +21,9 @@ public class MemoWriteDto {
     private String latitude;
     private String longitude;
     private String category;
+    private int score;
 
-    public MemoWriteDto(String title, String content, String latitude, String longitude, String category) {
+    public MemoWriteDto(String title, String content, String latitude, String longitude) {
         this.title = title;
         this.content = content;
         this.latitude = latitude;

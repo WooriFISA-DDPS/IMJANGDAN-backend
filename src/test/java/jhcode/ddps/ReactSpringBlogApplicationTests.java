@@ -1,10 +1,10 @@
-package imjangdan.ddps;
+package jhcode.ddps;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ImjangdanDdpsApplicationTests {
+class ReactSpringBlogApplicationTests {
 
     @Test
     void contextLoads() {

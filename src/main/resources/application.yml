@@ -8,6 +8,12 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false # 캐시설정
+    check-template-location: true # templates 디렉토리 검사(파일 없으면 에러 발생)
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
