@@ -73,6 +73,30 @@
 <script type="text/javascript" th:src="@{/js/memomap.js}"></script>
 <div id="map" class="mapBox" ></div>
 <script>
+    function addButtonClick() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // 카카오 맵스의 LatLng 객체 생성
+                const latlng = new kakao.maps.LatLng(latitude, longitude);
+
+                // 예를 들어 이 좌표를 사용해 맵 중심을 변경하거나, 마커를 추가할 수 있음
+                // map.setCenter(latlng);
+                // new kakao.maps.Marker({ position: latlng, map: map });
+
+                // 혹은 이 좌표를 다른 서버 API로 전송하거나 다른 페이지로 리디렉션할 때 사용
+                window.location.href = `http://localhost:3000/homememo?lat=${latitude}&lng=${longitude}`;
+            }, function(error) {
+                alert("위치 정보를 가져올 수 없습니다: " + error.message);
+                window.location.href = 'http://localhost:3000/homememo'; // 위치 정보 없이 리디렉션
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
             center: new kakao.maps.LatLng(37.54699, 127.09598), // 지도의 중심좌표
@@ -117,7 +141,6 @@
     });
 
 
-
     // 마커를 표시할 위치와 title 객체 배열입니다
     var positions = [
         {
@@ -140,20 +163,46 @@
     // 마커 이미지의 이미지 주소입니다
     var imageSrc = "/images/memo-icon.png";
 
-    for (var i = 0; i < positions.length; i ++) {
+    for (var i = 0; i < positions.length; i++) {
         // 마커 이미지의 이미지 크기입니다
-        var imageSize = new kakao.maps.Size(24, 35);
+        var imageSize = new kakao.maps.Size(35, 40);
         // 마커 이미지를 생성합니다
         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
         // 마커를 생성합니다
         var marker = new kakao.maps.Marker({
             map: map, // 마커를 표시할 지도
             position: positions[i].latlng, // 마커를 표시할 위치
-            title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-            image : markerImage // 마커 이미지
+            title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            image: markerImage // 마커 이미지
         });
     }
 
+
 </script>
+<button class="add-button" onclick="addButtonClick()">+</button>
+
 </body>
 </html>
+<style>
+    .add-button {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #007bff; /* Bootstrap primary color */
+        color: white;
+        font-size: 24px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        z-index: 1000;
+    }
+</style>
+
+
+
