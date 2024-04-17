@@ -1,5 +1,11 @@
 package imjangdan.ddps.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import imjangdan.ddps.dto.response.board.ResBoardListDto;
+import imjangdan.ddps.dto.response.member.ResMemberListDto;
+import imjangdan.ddps.entity.Board;
 import jakarta.transaction.Transactional;
 import imjangdan.ddps.common.exception.MemberException;
 import imjangdan.ddps.common.exception.ResourceNotFoundException;
@@ -14,6 +20,10 @@ import imjangdan.ddps.security.jwt.CustomUserDetailsService;
 import imjangdan.ddps.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,6 +45,17 @@ public class MemberService {
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
+
+    // 페이징 리스트
+    public Page<ResMemberListDto> getAllMembers(Pageable pageable) {
+        Page<Member> members = memberRepository.findAll(pageable);
+        List<ResMemberListDto> list = members.getContent().stream()
+            .map(ResMemberListDto::fromEntity)
+            .collect(Collectors.toList());
+        System.out.println("리스트 목록에서 email"+list.get(0).getEmail());
+        System.out.println("리스트 목록에서 username"+list.get(0).getUsername());
+        return new PageImpl<>(list, pageable, members.getTotalElements());
+    }
 
     public HttpStatus checkIdDuplicate(String email) {
         isExistUserEmail(email);

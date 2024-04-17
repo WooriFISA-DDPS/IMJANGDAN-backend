@@ -1,5 +1,7 @@
 package imjangdan.ddps.controller;
 
+import imjangdan.ddps.dto.response.board.ResBoardListDto;
+import imjangdan.ddps.dto.response.member.ResMemberListDto;
 import imjangdan.ddps.entity.Member;
 import imjangdan.ddps.service.MemberService;
 import imjangdan.ddps.dto.request.member.MemberLoginDto;
@@ -8,6 +10,11 @@ import imjangdan.ddps.dto.request.member.MemberUpdateDto;
 import imjangdan.ddps.dto.response.member.MemberResponseDto;
 import imjangdan.ddps.dto.response.member.MemberTokenDto;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -55,5 +62,13 @@ public class MemberController {
             @RequestBody MemberUpdateDto memberUpdateDTO) {
         MemberResponseDto memberUpdate = memberService.update(member, memberUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(memberUpdate);
+    }
+
+
+    @GetMapping("/memberlist")
+    public ResponseEntity<Page<ResMemberListDto>> memberList(
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<ResMemberListDto> listDTO = memberService.getAllMembers(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(listDTO);
     }
 }
