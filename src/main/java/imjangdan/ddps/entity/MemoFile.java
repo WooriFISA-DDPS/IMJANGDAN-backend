@@ -26,7 +26,7 @@ public class MemoFile extends BaseTimeEntity {
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BOARD_ID")
+    @JoinColumn(name = "MEMO_ID")
     public Memo memo;
 
     @Builder
