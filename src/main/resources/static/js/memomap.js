@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Ajax 요청을 통해 서버에서 메모 데이터를 가져와서 positions 배열에 추가
+    // Ajax 요청을 통해 서버에서 메모 데이터를 가져와서 positions 배열에 추가
     function fetchMemoData() {
         var positions = []; // positions 배열을 정의
 
@@ -56,12 +57,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 var memoPage = JSON.parse(xhr.responseText);
                 var memoList = memoPage.content;
 
+                var memoListContainer = document.getElementById('memo-list');
+                memoListContainer.innerHTML = ''; // 메모 리스트를 초기화
+
                 memoList.forEach(function(memo) {
                     var position = {
                         content: memo.title,
                         latlng: new kakao.maps.LatLng(memo.latitude, memo.longitude)
                     };
                     positions.push(position);
+
+                    // 메모를 리스트에 추가
+                    var listItem = document.createElement('li');
+                    listItem.textContent = memo.title + ' : ' + memo.content;
+                    memoListContainer.appendChild(listItem);
                 });
 
                 positions.forEach(function(pos) {
@@ -83,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         xhr.send();
     }
+
 
     // 메모 데이터 가져오기 실행
     fetchMemoData();
