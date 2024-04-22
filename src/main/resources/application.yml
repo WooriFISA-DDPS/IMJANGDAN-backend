@@ -36,6 +36,10 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+  devtools:
+    restart:
+      enabled: true
+
 jwt:
   header: "Authorization"
   prefix: "Bearer "
@@ -54,3 +58,5 @@ springdoc:
     path: /api-docs
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
+
+

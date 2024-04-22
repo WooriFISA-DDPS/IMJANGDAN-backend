@@ -49,10 +49,10 @@
                     <a class="nav-link" href="http://localhost:3000/financing">파이낸싱</a>
                 </li>
             </ul>
-<!--            <form class="d-flex">-->
-<!--                <input class="form-control me-2" type="text" placeholder="Search">-->
-<!--                <button class="btn btn-primary" type="button">Search</button>-->
-<!--            </form>-->
+            <!--            <form class="d-flex">-->
+            <!--                <input class="form-control me-2" type="text" placeholder="Search">-->
+            <!--                <button class="btn btn-primary" type="button">Search</button>-->
+            <!--            </form>-->
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="http://localhost:3000/login">로그인</a>
@@ -68,38 +68,102 @@
 <!--<div class="searchBox"></div>-->
 
 <!--<div id="map" class="mapBox"></div>-->
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0aca019ed744ce53b052c556e44d8239"></script>
+<!--<script>-->
+<!--    var script = document.createElement('script');-->
+<!--    script.src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0aca019ed744ce53b052c556e44d8239";-->
+<!--    document.head.appendChild(script);-->
+<!--</script>-->
 
 <script type="text/javascript" th:src="@{/js/memomap.js}"></script>
 <div id="map" class="mapBox" ></div>
 <script>
-    function addButtonClick() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+ 
 
-                // 카카오 맵스의 LatLng 객체 생성
-                const latlng = new kakao.maps.LatLng(latitude, longitude);
+// 클릭 횟수를 저장하는 변수
+var clickCount = 0;
 
-                // 예를 들어 이 좌표를 사용해 맵 중심을 변경하거나, 마커를 추가할 수 있음
-                // map.setCenter(latlng);
-                // new kakao.maps.Marker({ position: latlng, map: map });
+// 기존의 마커 변수를 선언합니다.
+var marker;
 
-                // 혹은 이 좌표를 다른 서버 API로 전송하거나 다른 페이지로 리디렉션할 때 사용
-                window.location.href = `http://localhost:3000/homememo?lat=${latitude}&lng=${longitude}`;
-            }, function(error) {
-                alert("위치 정보를 가져올 수 없습니다: " + error.message);
-                window.location.href = 'http://localhost:3000/homememo'; // 위치 정보 없이 리디렉션
-            });
+var infowindow; // infowindow 변수를 정의 및 초기화
+
+<!--var memoClick = 0;-->
+
+function displayAddress(latitude, longitude) {
+    // 좌표를 주소로 변환하는 역 지오코딩 요청을 보냅니다.
+    kakao.maps.services.Geocoder.coord2Address(new kakao.maps.LatLng(latitude, longitude), function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            // 역 지오코딩이 성공하면 주소 정보를 가져와서 인포윈도우에 표시합니다.
+            const address = result[0].address.address_name;
+            const content = `<div>현재 위치: ${address}</div>`;
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
         } else {
-            alert("Geolocation is not supported by this browser.");
+            // 역 지오코딩이 실패하면 에러 메시지를 표시합니다.
+            alert('주소를 가져오지 못했습니다: ' + status);
         }
-    }
+    });
+}
 
+// addButtonClick 함수 내에서 마커를 생성하고 업데이트합니다.
+function addButtonClick() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // 클릭 횟수에 따라 동작을 분기
+            if (clickCount % 2 === 0) {
+                // 인포윈도우를 표시하고 마커를 생성 또는 업데이트합니다.
+                const latlng = new kakao.maps.LatLng(latitude, longitude);
+                map.setCenter(latlng);
+
+                if (!marker) {
+                    marker = new kakao.maps.Marker({
+                        position: latlng,
+                        map: map
+                    });
+                } else {
+                    marker.setPosition(latlng);
+                }
+
+            // 메모 컴포넌트의 내용을 가져옵니다.
+            const memoContent = document.getElementById('memo-component').innerHTML;
+
+            // 인포윈도우에 표시할 내용을 생성합니다.
+            const content = `<div>현재 위치: 위도 ${latitude}, 경도 ${longitude}</div>` + memoContent;
+
+            // 인포윈도우를 생성하거나 업데이트합니다.
+            if (!infowindow) {
+                    infowindow = new kakao.maps.InfoWindow({
+                        content: content,
+                    });
+                } else {
+                    infowindow.setContent(content);
+                }
+                // 인포윈도우를 지도 위에 표시합니다.
+                infowindow.open(map, marker);
+
+                // 클릭 횟수를 증가합니다.
+                clickCount++;
+            }
+        }, function(error) {
+            // 위치 정보를 가져오지 못했을 때의 처리입니다.
+            alert("위치 정보를 가져올 수 없습니다: " + error.message);
+        });
+    } else {
+        // Geolocation을 지원하지 않는 경우의 처리입니다.
+        alert("이 브라우저에서는 Geolocation을 지원하지 않습니다.");
+    }
+}
+
+// 나머지 코드는 그대로 유지됩니다.
+    // 기존의 지도 생성 코드와 마커 클릭 시 인포윈도우 열기 코드는 그대로 유지
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
-            center: new kakao.maps.LatLng(37.54699, 127.09598), // 지도의 중심좌표
+            center: new kakao.maps.LatLng(37.58158, 126.8868), // 지도의 중심좌표
             level: 4 // 지도의 확대 레벨
         };
 
@@ -111,7 +175,7 @@
 
     // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-        markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
+        markerPosition = new kakao.maps.LatLng(37.58158, 126.8868); // 마커가 표시될 위치입니다
 
     // 마커를 생성합니다
     var marker = new kakao.maps.Marker({
@@ -125,12 +189,12 @@
     // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
     var content = '<div class="customoverlay">' +
         '  <a href="https://map.kakao.com/link/map/11394059" target="_blank">' +
-        '    <span class="title">구의야구공원</span>' +
+        '    <span class="title">상암IT센터</span>' +
         '  </a>' +
         '</div>';
 
     // 커스텀 오버레이가 표시될 위치입니다
-    var position = new kakao.maps.LatLng(37.54699, 127.09598);
+    var position = new kakao.maps.LatLng(37.58158, 127.8868);
 
     // 커스텀 오버레이를 생성합니다
     var customOverlay = new kakao.maps.CustomOverlay({
@@ -161,7 +225,7 @@
         }
     ];
     // 마커 이미지의 이미지 주소입니다
-    var imageSrc = "/images/memo-icon.png";
+    var imageSrc = "/images/memo-icon2.png";
 
     for (var i = 0; i < positions.length; i++) {
         // 마커 이미지의 이미지 크기입니다
@@ -179,6 +243,28 @@
 
 
 </script>
+
+<div id="news-component">
+    <h2>뉴스</h2>
+    <ul>
+        <li>뉴스 항목 1</li>
+        <li>뉴스 항목 2</li>
+        <li>뉴스 항목 3</li>
+        <!-- 더미 데이터를 원하는 만큼 추가하세요 -->
+    </ul>
+</div>
+
+<div id="memo-component">
+    <h2>메모</h2>
+    <ul id="memo-list">
+        <!-- 메모가 동적으로 추가될 자리 -->
+    </ul>
+</div>
+
+
+
+<script src="/src/main/resources/static/js/memomap.js"></script>
+
 <button class="add-button" onclick="addButtonClick()">+</button>
 
 </body>
