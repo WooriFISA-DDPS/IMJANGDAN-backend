@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var currentLat, currentLng;
 
-
     kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
         var latlng = mouseEvent.latLng;
         marker.setPosition(latlng);
@@ -45,43 +44,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    var positions = [
-        {
-            content: '<div>상암 IT 타워</div>',
-            latlng: new kakao.maps.LatLng(37.58163301627676, 126.8860228466823)
-        },
-        {
-            content: '<div>LG 유플러스</div>',
-            latlng: new kakao.maps.LatLng(37.58057831675249, 126.88781319354182)
-        },
-        {
-            content: '<div>가온 문화 공원</div>',
-            latlng: new kakao.maps.LatLng(37.58191615523997, 126.88766966937938)
-        }
-    ];
+    // Ajax 요청을 통해 서버에서 메모 데이터를 가져와서 positions 배열에 추가
+    function fetchMemoData() {
+        var positions = []; // positions 배열을 정의
 
-    var infowindow = new kakao.maps.InfoWindow({
-    });
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/memo/list', true);
 
-    positions.forEach(function(pos) {
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: pos.latlng
-        });
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                var memoPage = JSON.parse(xhr.responseText);
+                var memoList = memoPage.content;
 
-        kakao.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(pos.content);
-            infowindow.open(map, marker);
-        });
+                memoList.forEach(function(memo) {
+                    var position = {
+                        content: memo.title,
+                        latlng: new kakao.maps.LatLng(memo.latitude, memo.longitude)
+                    };
+                    positions.push(position);
+                });
 
-        infowindow.close();
+                positions.forEach(function(pos) {
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: pos.latlng
+                    });
 
-    });
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                        infowindow.setContent(pos.content);
+                        infowindow.open(map, marker);
+                    });
+                });
 
-    // 2. DOMContentLoaded 이벤트 핸들러 위치 확인하기
-    console.log('DOMContentLoaded 이벤트 핸들러가 실행되었습니다.');
+            } else {
+                console.error('Failed to fetch memo data: ' + xhr.status);
+            }
+        };
 
-    // 3. kakao.maps.LatLng에 전달되는 값을 확인하기
-    console.log('LatLng 확인:', positions.map(pos => [pos.latlng.getLat(), pos.latlng.getLng()]));
+        xhr.send();
+    }
 
+    // 메모 데이터 가져오기 실행
+    fetchMemoData();
+
+    var infowindow = new kakao.maps.InfoWindow();
 });

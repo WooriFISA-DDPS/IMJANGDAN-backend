@@ -9,13 +9,14 @@ h1{width:100%;height:100px; background-color: aquamarine;}
 .customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
 .customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 
+
 #memo-component {
     position: absolute;
-    top: 10;
-    right: 0;
+    top: 70px;
+    right: 20px; /* 오른쪽에 위치하도록 설정 */
     z-index: 2;
-    width: calc(25% - 20px); /* 오른쪽 사이드바와 같은 너비 설정 */
-    height: 25%; /* 전체 높이로 설정 */
+    width: calc(25% - 20px);
+    overflow-y: auto;
     background-color: white;
     padding: 10px;
     box-sizing: border-box;
@@ -23,18 +24,15 @@ h1{width:100%;height:100px; background-color: aquamarine;}
 
 #news-component {
     position: absolute;
-    top: calc(25% + 50px); /* 메모 컴포넌트의 아래쪽으로 위치하도록 조정 */
-    right: 0;
+    top: 220px;
+    right: 20px; /* 오른쪽에 위치하도록 설정 */
     z-index: 2;
-    width: calc(25% - 20px); /* 오른쪽 사이드바와 동일한 너비 설정 */
-    height: 25%; /* 전체 높이의 일정 비율 설정 */
+    width: calc(25% - 20px);
+    overflow-y: auto;
     background-color: white;
     padding: 10px;
     box-sizing: border-box;
 }
-
-
-
 
 #news-component h2,
 #memo-component h2 {
