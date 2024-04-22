@@ -1,15 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var mapContainer = document.getElementById('map');
-    var mapOptions = {
-        center: new kakao.maps.LatLng(37.58163301627676, 126.8860228466823), // 올바른 표기로 수정
-        level: 3
-    };
+    var container = document.getElementById('map'),
+        options = {
+            center: new kakao.maps.LatLng(37.58163301627676, 126.8860228466823),
+            level: 3
+        };
 
-    var map = new kakao.maps.Map(mapContainer, mapOptions);
+    console.log('Options:', options);
+
+    var map = new kakao.maps.Map(container, options);
 
     var marker = new kakao.maps.Marker({
         position: map.getCenter()
     });
+
     marker.setMap(map);
 
     var currentLat, currentLng;
@@ -55,11 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
             content: '<div>가온 문화 공원</div>',
             latlng: new kakao.maps.LatLng(37.58191615523997, 126.88766966937938)
         }
-
     ];
 
     var infowindow = new kakao.maps.InfoWindow({
-        map: map
     });
 
     positions.forEach(function(pos) {
@@ -82,7 +83,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 3. kakao.maps.LatLng에 전달되는 값을 확인하기
     console.log('LatLng 확인:', positions.map(pos => [pos.latlng.getLat(), pos.latlng.getLng()]));
-
-
 
 });
