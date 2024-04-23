@@ -9,13 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var map = new kakao.maps.Map(container, options);
 
-    var marker = new kakao.maps.Marker({
-        position: map.getCenter()
-    });
-
-    marker.setMap(map);
-
     var currentLat, currentLng;
+    var marker = new kakao.maps.Marker(); // 마커 변수를 전역으로 선언
 
     kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
         var latlng = mouseEvent.latLng;
@@ -27,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var message = '클릭한 위치의 위도는 ' + currentLat + ' 이고, ';
         message += '경도는 ' + currentLng + ' 입니다';
         document.getElementById('clickLatlng').innerHTML = message;
+
+        // 마커 생성
+        createMarker(latlng);
     });
 
     window.addButtonClick = function() {
@@ -44,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Ajax 요청을 통해 서버에서 메모 데이터를 가져와서 positions 배열에 추가
     // Ajax 요청을 통해 서버에서 메모 데이터를 가져와서 positions 배열에 추가
     function fetchMemoData() {
         var positions = []; // positions 배열을 정의
@@ -69,18 +66,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // 메모를 리스트에 추가
                     var listItem = document.createElement('li');
-                    listItem.textContent = memo.title + ' : ' + memo.content;
+                    listItem.textContent = memo.category + ' : ' + memo.title + ' : ' + memo.content;
                     memoListContainer.appendChild(listItem);
-                });
+                    console.log('category : ', memo.category);
 
-                positions.forEach(function(pos) {
+
+                    var imageSrc;
+                    if (memo.category === 'Good') {
+                        imageSrc = '/images/good-icon.png';
+                    } else if (memo.category === 'SoSo') {
+                        imageSrc = '/images/soso-icon.jpeg';
+                    } else if (memo.category === 'Bad') {
+                        imageSrc = '/images/bad-icon.jpeg';
+                    }
+
+                    imageSize = new kakao.maps.Size(43, 46), // 마커이미지의 크기입니다
+                    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+                    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
                     var marker = new kakao.maps.Marker({
-                        map: map,
-                        position: pos.latlng
+                        position: position.latlng,
+                        image: markerImage // 마커 이미지 설정
                     });
 
+                    marker.setMap(map);
+
                     kakao.maps.event.addListener(marker, 'click', function() {
-                        infowindow.setContent(pos.content);
+                        infowindow.setContent(position.content);
                         infowindow.open(map, marker);
                     });
                 });
@@ -93,9 +107,17 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.send();
     }
 
-
     // 메모 데이터 가져오기 실행
     fetchMemoData();
 
     var infowindow = new kakao.maps.InfoWindow();
+
+    // 마커 생성 함수
+    function createMarker(position) {
+        marker.setMap(null); // 기존 마커 삭제
+        marker = new kakao.maps.Marker({
+            position: position
+        });
+        marker.setMap(map); // 새로운 마커 지도에 표시
+    }
 });
