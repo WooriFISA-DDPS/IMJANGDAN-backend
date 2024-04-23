@@ -1,23 +1,29 @@
 pipeline {
     agent any
 
+    environment {
+        GRADLE_HOME = tool 'Gradle'
+        PATH = "$GRADLE_HOME/bin:$PATH"
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building the application...'
-                // Build commands here
+                sh 'gradle clean build'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // Test commands here
+                sh 'gradle test'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying the application...'
-                // Deployment commands here
+                // 예시: Docker 이미지 빌드 및 실행
+                sh 'docker build -t ddps-app .'
+                sh 'docker run -d --name ddps-back -p 8989:8989 ddps-app'
             }
         }
     }
