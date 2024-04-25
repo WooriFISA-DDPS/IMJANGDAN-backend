@@ -54,21 +54,38 @@
     </div>
 </nav>
 
+<div id = "mapwrap">
 <!-- Map and Marker Section -->
 <div id="map" class="mapBox"></div>
 <div id="clickLatlng"></div>
 <button class="add-button" onclick="addButtonClick()">+</button>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=78b11aba7429c23725ec0bad43611ef4"></script>
 
-<!-- 메모, 뉴스 컴포넌트 -->
-<div id="news-component">
-    <h2>뉴스</h2>
+<!-- 카테고리 메뉴 -->
+<div class="category">
     <ul>
-        <li>뉴스 항목 1</li>
-        <li>뉴스 항목 2</li>
-        <li>뉴스 항목 3</li>
+        <li id="goodMenu" onclick="changeMarker('good')">
+            <img class="icon" src="images/good.png" alt="Good">
+        </li>
+        <li id="sosoMenu" onclick="changeMarker('soso')">
+            <img class="icon" src="images/soso.png" alt="SoSo">
+        </li>
+        <li id="badMenu" onclick="changeMarker('bad')">
+            <img class="icon" src="images/bad.png" alt="Bad">
+        </li>
     </ul>
 </div>
+
+
+<!-- 메모, 뉴스 컴포넌트 -->
+<!--<div id="news-component">-->
+<!--    <h2>뉴스</h2>-->
+<!--    <ul>-->
+<!--        <li>뉴스 항목 1</li>-->
+<!--        <li>뉴스 항목 2</li>-->
+<!--        <li>뉴스 항목 3</li>-->
+<!--    </ul>-->
+<!--</div>-->
 
 <div id="memo-component">
     <h2>메모</h2>
@@ -76,5 +93,6 @@
     </ul>
 </div>
 
+</div>
 </body>
 </html>
