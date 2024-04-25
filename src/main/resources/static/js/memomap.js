@@ -187,6 +187,13 @@ document.addEventListener('DOMContentLoaded', function() {
         setMarkersOnMap(badMarkers, map);
     });
 
+    document.getElementById('allMenu').addEventListener('click', function() {
+        // 나쁨 카테고리 클릭 시 모든 마커 지도에 표시
+        setMarkersOnMap(goodMarkers, map);
+        setMarkersOnMap(sosoMarkers, map);
+        setMarkersOnMap(badMarkers, map);
+    });
+
     // 마커 배열을 지도에 표시하거나 숨기는 함수
     function setMarkersOnMap(markers, map) {
         markers.forEach(function(marker) {
