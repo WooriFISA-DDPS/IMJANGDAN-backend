@@ -10,6 +10,9 @@ COPY init-container.sh /app-spring/init-container.sh
 # 노출시킬 포트 설정
 EXPOSE 8989
 
+# 스크립트 실행 허가
+RUN chmod +x /app-spring/init-container.sh
+
 # 컨테이너 시작 시마다 스크립트가 실행하도록
 CMD ["/app-spring/init-container.sh"]
 
