@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var positions = []; // positions 배열을 정의
 
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/memo/list', true);
+            xhr.open('GET', '/api/memo/list', true);
 
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
@@ -129,11 +129,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 마커 이미지 설정
         if (category === 'good') {
-            markerImageSrc = '/images/good.png';
+            markerImageSrc ='images/good.png';
         } else if (category === 'soso') {
-            markerImageSrc = '/images/soso.png';
+            markerImageSrc = 'images/soso.png';
         } else if (category === 'bad') {
-            markerImageSrc = '/images/bad.png';
+            markerImageSrc = 'images/bad.png';
         }
 
         var markerImage = new kakao.maps.MarkerImage(markerImageSrc, imageSize, imageOption);
