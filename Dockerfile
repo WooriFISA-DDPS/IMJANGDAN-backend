@@ -15,7 +15,7 @@ EXPOSE 8989
 RUN chmod +x /app-spring/init-container.sh
 
 # 컨테이너 시작 시마다 스크립트가 실행하도록
-CMD ["/app-spring/init-container.sh"]
+CMD ["sh", "/app-spring/init-container.sh"]
 
 # 컨테이너 실행 시 자동으로 Spring Boot 앱 실행
 # CMD ["java", "-jar", "app.jar"]
