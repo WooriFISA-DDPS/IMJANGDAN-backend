@@ -124,8 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showMemoDetail(memoId) {
-        window.location.href = `http://localhost:3000/homememo?lat=${latitude}&lng=${longitude}`;
-        // 예를 들어, window.location.href = 'memo_detail.php?id=' + memoId;
+        window.location.href = `http://localhost:3000/homememo`;
     }
 
     // 마커 생성 함수
