@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', updateNewsPosition);
 });
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
     var container = document.getElementById('map'),
         options = {
@@ -52,10 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
             currentLat = latlng.getLat();
             currentLng = latlng.getLng();
 
-            var message = '클릭한 위치의 위도는 ' + currentLat + ' 이고, ';
-            message += '경도는 ' + currentLng + ' 입니다';
-            document.getElementById('clickLatlng').innerHTML = message;
-
             // 마커 생성
             createMarker(latlng);
         });
@@ -77,31 +75,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Ajax 요청을 통해 서버에서 메모 데이터를 가져와서 마커 배열에 추가
     function fetchMemoData() {
-            var positions = []; // positions 배열을 정의
+        var positions = []; // positions 배열을 정의
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/memo/list', true);
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/memo/list', true);
 
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    var memoPage = JSON.parse(xhr.responseText);
-                    var memoList = memoPage.content;
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                var memoPage = JSON.parse(xhr.responseText);
+                var memoList = memoPage.content;
 
-                    var memoListContainer = document.getElementById('memo-list');
-                    memoListContainer.innerHTML = ''; // 메모 리스트를 초기화
+                var memoListContainer = document.getElementById('memo-list');
+                memoListContainer.innerHTML = ''; // 메모 리스트를 초기화
 
-                    memoList.forEach(function(memo) {
-                        var position = {
-                            content: memo.title,
-                            latlng: new kakao.maps.LatLng(memo.latitude, memo.longitude)
-                        };
-                        positions.push(position);
+                memoList.forEach(function(memo) {
+                    var position = {
+                        content: memo.title,
+                        latlng: new kakao.maps.LatLng(memo.latitude, memo.longitude)
+                    };
+                    positions.push(position);
 
-                        // 메모를 리스트에 추가
-                        var listItem = document.createElement('li');
-                        listItem.textContent = memo.category + ' : ' + memo.title + ' : ' + memo.content;
-                        memoListContainer.appendChild(listItem);
-                        console.log('category : ', memo.category);
+                    // 메모를 리스트에 추가
+                    var listItem = document.createElement('li');
+                    listItem.textContent = memo.title + ' : ' + memo.content;
+                    // 각 메모에 클릭 이벤트 추가
+                    listItem.onclick = function() {
+                        showMemoDetail(memo.id);
+                    };
+                    memoListContainer.appendChild(listItem);
+                    console.log('category : ', memo.category);
 
                     // 메모의 카테고리에 따라 마커를 생성하여 해당하는 배열에 추가합니다.
                     if (memo.category === 'Good') {
@@ -121,11 +123,16 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.send();
     }
 
+    function showMemoDetail(memoId) {
+        window.location.href = `http://localhost:3000/homememo?lat=${latitude}&lng=${longitude}`;
+        // 예를 들어, window.location.href = 'memo_detail.php?id=' + memoId;
+    }
+
     // 마커 생성 함수
     function createMarker(position, category) {
         var markerImageSrc = '';  // 마커이미지의 주소입니다. 스프라이트 이미지 입니다
-        var imageSize = new kakao.maps.Size(30, 30); // 마커 이미지 크기
-        var imageOption = { offset: new kakao.maps.Point(15, 15) }; // 마커 이미지 옵션
+        var imageSize = new kakao.maps.Size(40, 40); // 마커 이미지 크기
+        var imageOption = { offset: new kakao.maps.Point(30, 30) }; // 마커 이미지 옵션
 
         // 마커 이미지 설정
         if (category === 'good') {
@@ -140,17 +147,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var marker = new kakao.maps.Marker({
             position: position.latlng,
-            image: markerImage
+            image: markerImage,
+            clickable: true
         });
 
         // 생성된 마커를 지도에 표시
         marker.setMap(map);
 
-        // 정보창 설정
+        var iwContent = `<div> ${position.content} <div>`,
+            iwRemoveable = true;
+
+// 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content : iwContent,
+            removable : iwRemoveable
+        });
+
+// 마커에 클릭이벤트를 등록합니다
         kakao.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(position.content);
+            // 마커 위에 인포윈도우를 표시합니다
             infowindow.open(map, marker);
         });
+
 
         // 해당 카테고리의 마커 배열에 추가
         if (category === 'good') {
@@ -164,6 +182,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 메모 데이터 가져오기 실행
     fetchMemoData();
+
+    document.getElementById('allMenu').addEventListener('click', function() {
+        // 나쁨 카테고리 클릭 시 모든 마커 지도에 표시
+        setMarkersOnMap(goodMarkers, map);
+        setMarkersOnMap(sosoMarkers, map);
+        setMarkersOnMap(badMarkers, map);
+    });
 
     // 좋음, 보통, 나쁨 카테고리 클릭 이벤트 핸들러
     document.getElementById('goodMenu').addEventListener('click', function() {
@@ -184,13 +209,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // 나쁨 카테고리 클릭 시 나쁨 마커만 지도에 표시
         setMarkersOnMap(goodMarkers, null);
         setMarkersOnMap(sosoMarkers, null);
-        setMarkersOnMap(badMarkers, map);
-    });
-
-    document.getElementById('allMenu').addEventListener('click', function() {
-        // 나쁨 카테고리 클릭 시 모든 마커 지도에 표시
-        setMarkersOnMap(goodMarkers, map);
-        setMarkersOnMap(sosoMarkers, map);
         setMarkersOnMap(badMarkers, map);
     });
 
