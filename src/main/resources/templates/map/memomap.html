@@ -64,6 +64,9 @@
 <!-- 카테고리 메뉴 -->
 <div class="category">
     <ul>
+        <li id="allMenu" onclick="changeMarker('all')">
+            <img class="icon" src="images/all.png" alt="All">
+        </li>
         <li id="goodMenu" onclick="changeMarker('good')">
             <img class="icon" src="images/good.png" alt="Good">
         </li>
@@ -76,22 +79,11 @@
     </ul>
 </div>
 
-
-<!-- 메모, 뉴스 컴포넌트 -->
-<!--<div id="news-component">-->
-<!--    <h2>뉴스</h2>-->
-<!--    <ul>-->
-<!--        <li>뉴스 항목 1</li>-->
-<!--        <li>뉴스 항목 2</li>-->
-<!--        <li>뉴스 항목 3</li>-->
-<!--    </ul>-->
-<!--</div>-->
-
-<div id="memo-component">
-    <h2>메모</h2>
-    <ul id="memo-list">
-    </ul>
-</div>
+    <div id="memo-component">
+        <h2>메모</h2>
+        <ul id="memo-list">
+        </ul>
+    </div>
 
 </div>
 </body>
