@@ -130,8 +130,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 마커 생성 함수
     function createMarker(position, category) {
         var markerImageSrc = '';  // 마커이미지의 주소입니다. 스프라이트 이미지 입니다
-        var imageSize = new kakao.maps.Size(40, 40); // 마커 이미지 크기
-        var imageOption = { offset: new kakao.maps.Point(30, 30) }; // 마커 이미지 옵션
+        var imageSize = new kakao.maps.Size(70, 70); // 마커 이미지 크기
+        var imageOption = { offset: new kakao.maps.Point(70, 70) }; // 마커 이미지 옵션
 
         // 마커 이미지 설정
         if (category === 'good') {
