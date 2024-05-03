@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MapController {
 	@GetMapping("/memomap")
 	public String memoMapService(){
-		return "/map/memomap";
+		return "map/memomap";
 	}
 }
