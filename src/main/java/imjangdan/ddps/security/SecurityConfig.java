@@ -45,16 +45,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests( authorize
                         -> authorize.requestMatchers(
                                 "/**"
-                                ).permitAll()
-//                                         "/board/list",
-//                                         "/board/{boardId}",
-//                                         "/board/search",
-//                                         "/user/checkId",
-//                                         "/user/register",
-//                                         "/user/login",
-//                                         "/board/{boardId}/comment/list/**",
-//                                         "/board/{boardId}/file/download/**",
-//                                         "/swagger-ui/**"
+//                            "/user/checkId",
+//                            "/user/register",
+//                            "/user/login",
+//                            "/board/search",
+//                            "/board/list",
+//                            "/board/{boardId}",
+//                            "/board/{boardId}/comment/list/**",
+//                            "/board/{boardId}/file/download/**",
+//                            "/memo/{memoId}",
+//                            "/memo/list",
+//                            "/news/list",
+//                            "/memomap", //타임리프
+//                            "/css/**", //타임리프
+//                            "/js/**", //타임리프
+//                            "/images/**" //타임리프
+                        ).permitAll()
 
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/board/**").hasRole("USER")
